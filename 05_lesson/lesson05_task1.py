@@ -1,28 +1,23 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-# Открываем браузер Firefox
-driver = webdriver.Firefox()
+# Открываем браузер Chrome
+driver = webdriver.Chrome()
 
 try:
-    # Переходим на страницу
-    driver.get("http://the-internet.herokuapp.com/login")
+    # Переходим на страницу с корректным протоколом
+    driver.get("https://uitestingplayground.com/classattr")
 
-    # Заполняем поле username
-    username_field = driver.find_element(By.ID, "username")
-    username_field.send_keys("tomsmith")
+    # Ждём появления кнопки с явным ожиданием
+    wait = WebDriverWait(driver, 10)  # ждём до 10 секунд
+    button = wait.until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, ".btn"))
+    )
 
-    # Заполняем поле password
-    password_field = driver.find_element(By.ID, "password")
-    password_field.send_keys("SuperSecretPassword!")
-
-    # Нажимаем кнопку Login
-    login_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
-    login_button.click()
-
-    # Ждём и выводим текст с зелёной плашки
-    success_message = driver.find_element(By.CSS_SELECTOR, ".flash.success")
-    print(success_message.text.strip())
+    # Кликаем на кнопку
+    button.click()
+    print("Кнопка успешно нажата!")
 
 finally:
     # Закрываем браузер
